@@ -22,6 +22,21 @@ class IndexController extends Controller
         ]);
     }
 
+    public function about()
+    {
+        return view('about');
+    }
+
+    public function help()
+    {
+        return view('help');
+    }
+
+    public function watchlist()
+    {
+        return view('watchlist');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

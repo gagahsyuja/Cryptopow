@@ -6,9 +6,9 @@
     </ul>
     <nav>
         <ul class="topbar-link">
-            <li><a href="./about.php#top">About</a></li>
-            <li><a href="./watchlist.php#top">Watchlist</a></li>
-            <li><a href="./help.php#top">Help</a></li>
+            <li><a href="{{ route('about') }}">About</a></li>
+            <li><a href="{{ route('watchlist') }}">Watchlist</a></li>
+            <li><a href="{{ route('help') }}">Help</a></li>
         </ul>
     </nav>
     <ul class="topbar-account">
