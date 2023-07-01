@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
     {
         $this -> call(CoinsTableSeeder::class);
         $this -> call(AlgosTableSeeder::class);
+        $this -> call(AccountsTableSeeder::class);
     }
 }
