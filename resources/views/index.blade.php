@@ -85,6 +85,20 @@
                 @endforeach
 
                 </tr>
+                <tr class="wish-box">
+                    <form action="/store" method="post">
+                        @csrf
+                        @foreach ($coins -> where('algo', $algo -> name) as $coin)
+                        <td>
+                            @if (!$watchlist -> where('short_name', $coin -> short_name) -> exists())
+                            <button type="submit" class="btnCoin" name="coin" value="{{ $coin -> short_name }}"><i class="fa-regular fa-eye fa-2x"></i></button>
+                            @else
+                            <button type="submit" class="btnCoin" name="coin" value="{{ $coin -> short_name }}"><i class="fa-sharp fa-solid fa-eye fa-2x"></i></button>
+                            @endif
+                        </td>
+                        @endforeach
+                    </form>
+                </tr>
             </table>
 
         @endforeach

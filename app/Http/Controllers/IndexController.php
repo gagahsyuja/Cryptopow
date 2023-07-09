@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Algo;
 use App\Models\Coin;
+use App\Models\Watchlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class IndexController extends Controller
 {
@@ -15,9 +19,11 @@ class IndexController extends Controller
     {
         $coin = Coin::all();
         $algo = Algo::all();
+        $watchlist = Watchlist::where('uname', 'ssa');
 
         return view('index', [
             'coins' => $coin,
+            'watchlist' => $watchlist,
             'algos' => $algo
         ]);
     }
@@ -34,7 +40,61 @@ class IndexController extends Controller
 
     public function watchlist()
     {
-        return view('watchlist');
+        $watch = DB::table('watchlists')
+                -> leftJoin('coins', 'watchlists.short_name', '=', 'coins.short_name')
+                -> where('uname', 'ssa')
+                -> get();
+
+        if ($watch -> isEmpty())
+        {
+            $isExist = false;
+        }
+        else
+        {
+            $isExist = true;
+        }
+
+        return view('watchlist', [
+            'watches' => $watch,
+            'exist' => $isExist
+        ]);
+    }
+
+    public function account()
+    {
+        return view('account');
+    }
+
+    public function login(Request $request)
+    {
+        // $credentials = $request -> validate ([
+        //     'uname' => ['required'],
+        //     'passwd' => ['required']
+        // ]);
+
+        $credentials = [
+            'name' => $request -> uname,
+            'password' => $request -> passwd
+        ];
+
+        if (Auth::attempt($credentials))
+        {
+            $request -> session() -> put('uname', $request -> uname);
+
+            return redirect('');
+        }
+
+        else
+        {
+            return 'failed';
+        }
+    }
+
+    public function logout()
+    {
+        Session::flush();
+
+        return redirect() -> back();
     }
 
     /**
@@ -50,7 +110,23 @@ class IndexController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $coin = $request -> coin;
+        $sql = Watchlist::where('uname', 'ssa') -> where('short_name', $coin);
+
+        if ($sql -> exists())
+        {
+            $sql -> delete();
+        }
+        
+        else
+        {
+            Watchlist::create([
+                'uname' => 'ssa',
+                'short_name' => $coin
+            ]);
+        }
+
+        return redirect() -> back();
     }
 
     /**
@@ -60,8 +136,33 @@ class IndexController extends Controller
     {
         $coin = Coin::where('short_name', $short) -> firstOrFail();
 
+        $isExist = Watchlist::where('uname', 'ssa')
+                -> where('short_name', $short)
+                -> exists();
+
+        $miner = DB::table('coins')
+                -> join('miners', 'coins.algo', '=', 'miners.algo')
+                -> where('coins.short_name', $short)
+                -> get();
+
+        $pool = DB::table('coin_pools')
+                -> join('pools', 'coin_pools.pool_short_name', '=', 'pools.short_name')
+                -> where('coin_pools.coin_short_name', $short)
+                -> get();
+
+        $about = DB::table('coins')
+                -> join('algos', 'coins.algo', '=', 'algos.name')
+                -> where('coins.short_name', $short)
+                -> get()
+                -> firstOrFail();
+
         return view('show', [
-            "coins" => $coin
+            "short" => $short,
+            "coins" => $coin,
+            "miners" => $miner,
+            "pools" => $pool,
+            "algo" => $about,
+            "exist" => $isExist
         ]);
     }
 

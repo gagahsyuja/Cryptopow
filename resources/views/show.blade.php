@@ -13,16 +13,17 @@
         <br><br>
         <h3 class="title">{{ $coins -> name }}<br>({{ strtoupper($coins -> short_name) }})</h3>
         <h3 class="title-button">
+            <form action="/store" method="POST">
+                @csrf
 
-        <form id="submitForm">
-            <button type="button" id="submitButton"><span id="{{ $coins -> short_name }}"></span></button>
-        </form>
-
-        <form id="submitForm">
-            <a class="watch-button" href="../login.php"><button type="button" style="cursor: pointer;"><i class="fa-regular fa-eye fa-2x"></i></button></a>
-        </form>
-
+                @if (!$exist)
+                    <button class="btnCoin" name="coin" value="{{ $coins -> short_name }}" style="cursor: pointer;"><i class="fa-regular fa-eye fa-2x"></i></button>
+                @else
+                    <button class="btnCoin" name="coin" value="{{ $coins -> short_name }}" style="cursor: pointer;"><i class="fa-sharp fa-solid fa-eye fa-2x"></i></button>
+                @endif
+            </form>
         </h3>
+
         <img class="image" src="{{ $coins -> image_url }}" alt="image of {{ $coins -> name }}" width="18%">
         <br>
         <table class="details">
@@ -36,19 +37,23 @@
             <tr>
                 <td class="details-link-title"><h3>Algorithm</h3></td>
                 <td class="details-link">
-                    <a href="' . $algoAbout . '" target="_blank">{{ ucwords($coins -> algo) }}</a>
+                    <a href="{{ $algo -> about }}" target="_blank">{{ ucwords($coins -> algo) }}</a>
                 </td>
             </tr>
             <tr>
                 <td class="details-link-title"><h3>Pools</h3></td>
-                <td class="details-link">';
-                    <a href="' . $site . '" target="_blank">' . $name . '</a>
+                <td class="details-link">
+                    @foreach ($pools as $pool)
+                    <a href="{{ $pool -> site }}" target="_blank">{{ $pool -> name }}</a>
+                    @endforeach
                 </td>
             </tr>
             <tr>
                 <td class="details-link-title"><h3>Miners</h3></td>
                 <td class="details-link">
-                    <a href="' . $source . '" target="_blank">' . $name . '</a>
+                    @foreach ($miners as $miner)
+                    <a href="{{ $miner -> source }}" target="_blank">{{ $miner -> name }}</a>
+                    @endforeach
                 </td>
             </tr>
         </table>
@@ -69,8 +74,8 @@
 </script>
 <script>
 
-    var ' . $short . 'Percent = document.getElementById("' . $short . 'Percent");
-    var ' . $short . 'Price = document.getElementById("' . $short . 'Price");
+    var {{ $short }}Percent = document.getElementById("{{ $short }}Percent");
+    var {{ $short }}Price = document.getElementById("{{ $short }}Price");
 
     var liveprice = {
         "async": true,
@@ -82,24 +87,24 @@
     
     $.ajax(liveprice).done(function (response) {
     
-        var last = response.tickers.' . $short . '_idr.last;
-        var yest = response.prices_24h.' . $short . 'idr;
+        var last = response.tickers.{{ $short }}_idr.last;
+        var yest = response.prices_24h.{{ $short }}idr;
         var percent = last * 100 / yest;
 
-        ' . $short . 'Price.innerHTML = last;
+        {{ $short }}Price.innerHTML = last;
     
         if (percent > 100)
         {
             percent -= 100;
             
-            ' . $short . 'Percent.innerHTML = "<span style=\'color: #b8bb26; text-shadow: 2px 2px 5px #282828;\'><i class=\'fa-solid fa-caret-up\'></i> " + percent.toFixed(2) + "%</span>";
+            {{ $short }}Percent.innerHTML = "<span style=\'color: #b8bb26; text-shadow: 2px 2px 5px #282828;\'><i class=\'fa-solid fa-caret-up\'></i> " + percent.toFixed(2) + "%</span>";
         }
     
         else
         {
             percent = 100 - percent;
 
-            ' . $short . 'Percent.innerHTML = "<span style=\'color: #9d0006; text-shadow: 2px 2px 5px #3c3836;\'><i class=\'fa-solid fa-caret-down\'></i> " + percent.toFixed(2) + "%</span>";
+            {{ $short }}Percent.innerHTML = "<span style=\'color: #9d0006; text-shadow: 2px 2px 5px #3c3836;\'><i class=\'fa-solid fa-caret-down\'></i> " + percent.toFixed(2) + "%</span>";
         }
     
     })
@@ -107,33 +112,13 @@
 </script>
 <script>
 
-    $(document).ready(function()
-    {
-        var short = "' . $short . '"
-        
-        $("#' . $short . '").load("./coin-button.php",
-        {
-            coinShort: short
-        })
-    
-        $("#submitButton").on("click", function(event)
-        {
-            $.ajax(
-            {
-                type: "post",
-                url: "./coin-insert.php",
-                data: $("#submitForm").serialize() + "&coin=' . $short . '",
-
-                success: function()
-                {
-                    $("#' . $short . '").load("./coin-button.php",
-                    {
-                        coinShort: short
-                    })
-                }
-            })
-        })
-    })
+    // $(document).ready(function()
+    // {
+    //     $("#submitButton").on("click", function()
+    //     {
+    //         alert('hello')
+    //     })
+    // })
 
 </script>
 

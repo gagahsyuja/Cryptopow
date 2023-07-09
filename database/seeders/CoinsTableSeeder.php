@@ -24,7 +24,7 @@ class CoinsTableSeeder extends Seeder
             [
                 'algo' => 'equihash',
                 'short_name' => 'btg',
-                'name' => 'Bitcoin Gold',
+                'name' => 'Bitcoi Gold',
                 'image_url' => 'https://cryptologos.cc/logos/bitcoin-gold-btg-logo.png?v=023',
                 'price_url' => 'https://indodax.com/api/ticker/btgidr'
             ],

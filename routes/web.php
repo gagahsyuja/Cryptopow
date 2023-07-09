@@ -28,6 +28,16 @@ Route::get('/about', [IndexController::class, 'about']) -> name('about');
 
 Route::get('/watchlist', [IndexController::class, 'watchlist']) -> name('watchlist');
 
-Route::get('/help', [IndexController::class, 'help']) -> name('help');
+// Route::get('/help', [IndexController::class, 'help']) -> name('help');
+
+Route::get('/account', [IndexController::class, 'account']) -> name('account');
+
+Route::post('/account/login', [IndexController::class, 'login']) -> name('login');
+
+Route::get('/account/logout', [IndexController::class, 'logout']) -> name('logout');
 
 Route::get('/coin/{short}', [IndexController::class, 'show']) -> name('show');
+
+Route::post('/store', [IndexController::class, 'store']);
+
+Route::get('/watchlist', [IndexController::class, 'watchlist']) -> name('watchlist');

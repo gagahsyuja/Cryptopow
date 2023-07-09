@@ -255,7 +255,7 @@ header li a {
 
 .navbar {
     background-color: #d79921;
-    height: 105px;
+    height: 85px;
     /* padding-left: 18%; */
     /* padding-right: 18%; */
 }
@@ -767,7 +767,7 @@ input[type=submit]:not(:hover) {
     transition: 0.2s;
 }
 
-button[type=submit], button[type=button] {
+button[type=submit] {
     height: 35px;
     width: 5%;
     color: #282828;
@@ -776,13 +776,13 @@ button[type=submit], button[type=button] {
 	border: none;
 }
 
-button[type=submit]:hover, button[type=button]:hover {
+button[type=submit]:hover {
 	background-color: #fabd2f;
 	color: #282828;
     transition: 0.2s;
 }
 
-button[type=submit]:not(:hover), button[type=button]:not(:hover) {
+button[type=submit]:not(:hover) {
     transition: 0.2s;
 }
 
@@ -1130,4 +1130,37 @@ button[type=submit]:not(:hover), button[type=button]:not(:hover) {
     bottom: 0%;
     left: 78%;
     right: 5%;
+}
+
+.btn {
+    /* margin-left: 10px; */
+    /* float: right; */
+    font-size: large;
+    color: #3c3836;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #b57614;
+    border: none;
+    border-radius: 10px;
+}
+
+.btn:hover {
+    cursor: default;
+}
+
+.btnCoin {
+    height: 35px;
+    width: 5%;
+    color: #282828;
+    border-radius: 7px;
+    background-color: #d79921;
+    border: none;
+    transition: 0.2s;
+}
+
+.btnCoin:hover {
+    background-color: #fabd2f;
+    transition: 0.2s;
 }
